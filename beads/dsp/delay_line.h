@@ -42,6 +42,14 @@
 
 namespace beads {
 
+// MinGW defaults to the MS bitfield layout, which pads the packed 12-bit items
+// below to 4 bytes instead of 3.
+#ifdef __MINGW32__
+#define BEADS_PACKED __attribute__((packed, gcc_struct))
+#else
+#define BEADS_PACKED __attribute__((packed))
+#endif
+
 enum Resolution {
   RESOLUTION_8_BIT,
   RESOLUTION_12_BIT,
@@ -98,7 +106,7 @@ struct Item<RESOLUTION_12_BIT, 2> {
   enum { bundle_size = 1 };
   int16_t l : 12;
   int16_t r : 12;
-} __attribute__((packed));
+} BEADS_PACKED;
 
 template<>
 struct Item<RESOLUTION_12_BIT, 1> {
@@ -119,7 +127,7 @@ struct Item<RESOLUTION_12_BIT, 1> {
   enum { bundle_size = 2 };
   int16_t odd : 12;
   int16_t even : 12;
-} __attribute__((packed));
+} BEADS_PACKED;
 
 template<>
 struct Item<RESOLUTION_8_BIT, 1> {
