@@ -274,7 +274,11 @@ void DelayController::RenderInternal(
         if (new_head) {
           const int slice_duration = int(
               clock_.interval(interval) * tap_ratio[ratio]);
-          const int num_slices = max_delay_ / slice_duration;
+          // A very fast clock gives a slice duration of 0. Dividing by it
+          // yields 0 on the hardware's ARM core, but traps on x86.
+          const int num_slices = slice_duration
+              ? max_delay_ / slice_duration
+              : 0;
           if (numerator_quantizer_[i].num_steps() != num_slices) {
             numerator_quantizer_[i].Init(
                 num_slices,
