@@ -91,7 +91,8 @@ class WavetableVoice {
           wave_lp_,
           p.time.value(&position_random_walk_, *freeze ? 0 : 1, 1.0f, true),
           0.025f);
-      const float wave = wave_lp_ * float(kNumWavesPerTable - 1);
+      const float wave = std::min(
+          wave_lp_ * float(kNumWavesPerTable - 1), kMaxWaveIndex);
       const float frequency = fm.Next();
       
       phase_ += frequency;

@@ -41,6 +41,11 @@ namespace beads {
 const size_t kTableSize = 256;
 const size_t kNumWavesPerTable = 16;
 
+// Waves are read in pairs. Stop just short of the last one, so that with the
+// wave parameter at exactly 1.0 the second wave of the pair is not the first
+// wave of the next bank, or past the end of the table for the last bank.
+const float kMaxWaveIndex = float(kNumWavesPerTable - 1) - 0.001f;
+
 inline float InterpolateWaveHermite(
     const int16_t* table,
     int32_t index_integral,
@@ -121,7 +126,7 @@ class WavetableGrain : public Grain {
       float gain,
       float pan,
       float fractional_sample) {
-    wave = wave * float(kNumWavesPerTable - 1);
+    wave = std::min(wave * float(kNumWavesPerTable - 1), kMaxWaveIndex);
     MAKE_INTEGRAL_FRACTIONAL(wave);
 
     wave_integral_ = wave_integral;
