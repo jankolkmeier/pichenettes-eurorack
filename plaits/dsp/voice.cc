@@ -72,6 +72,7 @@ void Voice::Init(BufferAllocator* allocator) {
   
   engine_quantizer_.Init(engines_.size(), 0.05f, true);
   previous_engine_index_ = -1;
+  first_engine_ = 0;
   reload_user_data_ = false;
   engine_cv_ = 0.0f;
   
@@ -122,6 +123,7 @@ void Voice::Render(
   int engine_index = engine_quantizer_.Process(
       patch.engine,
       engine_cv_);
+  engine_index = std::max(engine_index, first_engine_);
   
   Engine* e = engines_.get(engine_index);
   

@@ -176,6 +176,10 @@ class Voice {
       Frame* frames,
       size_t size);
   inline int active_engine() const { return previous_engine_index_; }
+  // Lowest engine that the engine parameter and CV can select.
+  inline void set_first_engine(int first_engine) {
+    first_engine_ = first_engine;
+  }
     
  private:
   void ComputeDecayParameters(const Patch& settings);
@@ -231,6 +235,7 @@ class Voice {
   
   bool reload_user_data_;
   int previous_engine_index_;
+  int first_engine_;
   float engine_cv_;
   
   float previous_note_;
