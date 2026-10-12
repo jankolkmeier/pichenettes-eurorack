@@ -46,7 +46,9 @@ namespace stages {
 // pre-allocated Segments shared by all SegmentGenerators!
 const int kMaxNumSegments = 36;
 
-const size_t kMaxDelay = 576;
+// The final hardware firmware shortened this to 576 to make room in RAM. Keep
+// the original length here, so that the range of the delay does not shrink.
+const size_t kMaxDelay = 768;
 
 #define DECLARE_PROCESS_FN(X) void Process ## X \
       (const stmlib::GateFlags* gate_flags, Output* out, size_t size);
